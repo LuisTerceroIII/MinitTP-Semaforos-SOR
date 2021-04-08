@@ -70,6 +70,25 @@ void* cortar(void *data) {
     pthread_exit(NULL);
 }
 
+
+void* mezclar(void *data) {
+	//creo el nombre de la accion de la funcion 
+	char *accion = "mezclar";
+	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
+	struct parametro *mydata = data;
+	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
+	sem_wait(&mydata->semaforos_param.sem_mezclar);
+	
+	imprimirAccion(mydata,accion);
+	//uso sleep para simular que que pasa tiempo
+	usleep( 20000 );
+	//doy la señal a la siguiente accion (cortar me habilita mezclar)
+    //sem_post(&mydata->semaforos_param.sem_mezclar);
+	
+    pthread_exit(NULL);
+}
+
+
 void* ejecutarReceta(void *i) {
 	
 	//variables semaforos
@@ -101,12 +120,12 @@ void* ejecutarReceta(void *i) {
 	//seteo las acciones y los ingredientes (Faltan acciones e ingredientes) ¿Se ve hardcodeado no? ¿Les parece bien?
      	strcpy(pthread_data->pasos_param[0].accion, "cortar");
 	    strcpy(pthread_data->pasos_param[0].ingredientes[0], "ajo");
-      strcpy(pthread_data->pasos_param[0].ingredientes[1], "perejil");
+      	strcpy(pthread_data->pasos_param[0].ingredientes[1], "perejil");
 
 
 	    strcpy(pthread_data->pasos_param[1].accion, "mezclar");
 	    strcpy(pthread_data->pasos_param[1].ingredientes[0], "ajo");
-      strcpy(pthread_data->pasos_param[1].ingredientes[1], "perejil");
+      	strcpy(pthread_data->pasos_param[1].ingredientes[1], "perejil");
  	    strcpy(pthread_data->pasos_param[1].ingredientes[2], "huevo");
 	    strcpy(pthread_data->pasos_param[1].ingredientes[3], "carne");
 	
@@ -153,14 +172,20 @@ int main ()
 	int rc;
 	int *equipoNombre1 =malloc(sizeof(*equipoNombre1));
 	int *equipoNombre2 =malloc(sizeof(*equipoNombre2));
+	int *equipoNombre3 =malloc(sizeof(*equipoNombre3));
+	int *equipoNombre4 =malloc(sizeof(*equipoNombre4));
 //faltan equipos
   
 	*equipoNombre1 = 1;
 	*equipoNombre2 = 2;
+	*equipoNombre1 = 3;
+	*equipoNombre2 = 4;
 
 	//creo las variables los hilos de los equipos
 	pthread_t equipo1; 
 	pthread_t equipo2;
+	pthread_t equipo3; 
+	pthread_t equipo4;
 //faltan hilos
   
 	//inicializo los hilos de los equipos
@@ -173,6 +198,17 @@ int main ()
                             NULL,                          //atributos del thread
                                 ejecutarReceta,             //funcion a ejecutar
                                 equipoNombre2);
+
+	rc = pthread_create(&equipo3,                           //identificador unico
+                            NULL,                          //atributos del thread
+                                ejecutarReceta,             //funcion a ejecutar
+                                equipoNombre3); 
+
+    rc = pthread_create(&equipo4,                           //identificador unico
+                            NULL,                          //atributos del thread
+                                ejecutarReceta,             //funcion a ejecutar
+                                equipoNombre4);
+
   //faltn inicializaciones
 
 
@@ -184,6 +220,8 @@ int main ()
 	//join de todos los hilos
 	pthread_join (equipo1,NULL);
 	pthread_join (equipo2,NULL);
+	pthread_join (equipo3,NULL);
+	pthread_join (equipo4,NULL);
 //.. faltan joins
 
 
@@ -191,5 +229,5 @@ int main ()
 }
 
 
-//Para compilar:   gcc subwayArgento.c -o ejecutable -lpthread
-//Para ejecutar:   ./ejecutable
+//Para compilar:   gcc subwayArgentoCopy.c -o subway -lpthread
+//Para ejecutar:   ./subway
