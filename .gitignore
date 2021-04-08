@@ -1,3 +1,5 @@
-./ejecutable
-./test
-./tests.c
+.vscode/
+ejecutable
+mute
+rwF
+test

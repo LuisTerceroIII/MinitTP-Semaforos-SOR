@@ -33,7 +33,7 @@ int main() {
     char buffer [100];
     int k = 0;
     receta = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/receta.txt","r+");
-
+    
     if(receta == NULL ) {
         printf("No se puedo abrir receta \n");
         return -1;
@@ -70,41 +70,39 @@ int main() {
             }
             k++;
         }
+        fclose(receta);
     }
 
     int sizePasos = sizeof(pasos->pasos_param) / sizeof(pasos->pasos_param[0]);
 
     printf("Ingrediente : %s\n",pasos->pasos_param[1].ingredientes[3]);
 
-    printf("---------------------------\n"); 
+    printf("---------------------------\n");
+    FILE *salida = NULL;
+    salida = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/salida.txt","w"); 
+    fputs("Pasos: \n",salida);
     for (int i = 0; i < sizePasos; i++) {
        if(strcmp(pasos->pasos_param[i].accion," ") != 0) {
+            fputs("Accion : ",salida);
+            fputs(pasos->pasos_param[i].accion,salida);
+            fputs("\n",salida);
             printf("Accion : %s\n",pasos->pasos_param[i].accion);
             int sizeArrayIngredientes = sizeof(pasos->pasos_param[i].ingredientes) / sizeof(pasos->pasos_param[i].ingredientes[0]);
+            fputs("Ingredeientes : \n",salida);
             for (int j = 0; j < sizeArrayIngredientes; j++) {
                 if(strcmp(pasos->pasos_param[i].ingredientes[j]," ") != 0) {
+                    
                     printf("Ingrediente : %s\n",pasos->pasos_param[i].ingredientes[j]);
+                    fputs(pasos->pasos_param[i].ingredientes[j],salida);
+                     fputs("\n",salida);
                 }
             }
        }
-        
-        
     }
     
-
-    //int sizeArrayIngredientes = (int)( sizeof(pasos->pasos_param[i].ingredientes) / sizeof(pasos->pasos_param[i].ingredientes[0]) );
-
-
-
-
-
-
-
-
-
-
-
-
+    fputs("\n\nLuis Espinoza",salida);
+    fclose(salida);
+    
 /* 
 
 
