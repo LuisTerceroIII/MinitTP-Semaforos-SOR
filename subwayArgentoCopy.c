@@ -289,6 +289,7 @@ void* armar(void *data) {
 
 	pthread_mutex_lock(&mutexPosicion);
 	printf("\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
+	fprintf(salida,"\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
 	posicionDeLLegada++;
 	pthread_mutex_unlock(&mutexPosicion);
     pthread_exit(NULL);

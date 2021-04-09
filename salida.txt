@@ -1,0 +1,196 @@
+Ejecutando equipo 1 
+
+	Equipo 1 - accion cortar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : ajo 
+	Equipo 1 ingrediente  1 : perejil 
+Ejecutando equipo 2 
+Ejecutando equipo 4 
+Ejecutando equipo 3 
+
+	Equipo 2 - accion cortar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : ajo 
+	Equipo 2 ingrediente  1 : perejil 
+
+	Equipo 4 - accion cortar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : ajo 
+	Equipo 4 ingrediente  1 : perejil 
+
+	Equipo 1 - accion cortar extras 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : lechuga 
+	Equipo 1 ingrediente  1 : tomate 
+	Equipo 1 ingrediente  2 : cebolla morada 
+	Equipo 1 ingrediente  3 : pepino
+ 
+
+	Equipo 3 - accion cortar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : ajo 
+	Equipo 3 ingrediente  1 : perejil 
+
+	Equipo 2 - accion cortar extras 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : lechuga 
+	Equipo 2 ingrediente  1 : tomate 
+	Equipo 2 ingrediente  2 : cebolla morada 
+	Equipo 2 ingrediente  3 : pepino
+ 
+
+	Equipo 3 - accion cortar extras 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : lechuga 
+	Equipo 3 ingrediente  1 : tomate 
+	Equipo 3 ingrediente  2 : cebolla morada 
+	Equipo 3 ingrediente  3 : pepino
+ 
+
+	Equipo 4 - accion cortar extras 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : lechuga 
+	Equipo 4 ingrediente  1 : tomate 
+	Equipo 4 ingrediente  2 : cebolla morada 
+	Equipo 4 ingrediente  3 : pepino
+ 
+
+	Equipo 1 - accion mezclar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : ajo picado 
+	Equipo 1 ingrediente  1 : perejil picado 
+	Equipo 1 ingrediente  2 : huevo 
+
+	Equipo 4 - accion mezclar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : ajo picado 
+	Equipo 4 ingrediente  1 : perejil picado 
+	Equipo 4 ingrediente  2 : huevo 
+
+	Equipo 2 - accion mezclar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : ajo picado 
+	Equipo 2 ingrediente  1 : perejil picado 
+	Equipo 2 ingrediente  2 : huevo 
+
+	Equipo 3 - accion mezclar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : ajo picado 
+	Equipo 3 ingrediente  1 : perejil picado 
+	Equipo 3 ingrediente  2 : huevo 
+
+	Equipo 4 - accion salar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : mezcla 
+
+	Equipo 4 - accion embetunar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : carne 
+	Equipo 4 ingrediente  1 : mezcla 
+
+	Equipo 2 - accion salar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : mezcla 
+
+	Equipo 4 - accion apanar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : carne embetunada 
+
+	Equipo 2 - accion embetunar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : carne 
+	Equipo 2 ingrediente  1 : mezcla 
+
+	Equipo 1 - accion salar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : mezcla 
+
+	Equipo 4 - accion cocinar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : milanesa 
+
+	Equipo 4 - accion hornear 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : pan crudo 
+
+	Equipo 2 - accion apanar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : carne embetunada 
+
+	Equipo 1 - accion embetunar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : carne 
+	Equipo 1 ingrediente  1 : mezcla 
+
+	Equipo 3 - accion salar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : mezcla 
+
+	Equipo 1 - accion apanar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : carne embetunada 
+
+	Equipo 2 - accion hornear 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : pan crudo 
+
+	Equipo 3 - accion embetunar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : carne 
+	Equipo 3 ingrediente  1 : mezcla 
+
+	Equipo 2 - accion cocinar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : milanesa 
+
+	Equipo 3 - accion apanar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : carne embetunada 
+
+	Equipo 1 - accion hornear 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : pan crudo 
+
+	Equipo 4 - accion armar 
+ 	Equipo 4 -----------ingredientes : ----------
+	Equipo 4 ingrediente  0 : pan horneado 
+	Equipo 4 ingrediente  1 : milanesa cocida 
+	Equipo 4 ingrediente  2 : verdudas extras 
+
+	Equipo 1 - accion cocinar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : milanesa 
+
+Equipo 4 llega en posicion : 1
+
+	Equipo 3 - accion hornear 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : pan crudo 
+
+	Equipo 2 - accion armar 
+ 	Equipo 2 -----------ingredientes : ----------
+	Equipo 2 ingrediente  0 : pan horneado 
+	Equipo 2 ingrediente  1 : milanesa cocida 
+	Equipo 2 ingrediente  2 : verdudas extras 
+
+	Equipo 3 - accion cocinar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : milanesa 
+
+Equipo 2 llega en posicion : 2
+
+	Equipo 1 - accion armar 
+ 	Equipo 1 -----------ingredientes : ----------
+	Equipo 1 ingrediente  0 : pan horneado 
+	Equipo 1 ingrediente  1 : milanesa cocida 
+	Equipo 1 ingrediente  2 : verdudas extras 
+
+Equipo 1 llega en posicion : 3
+
+	Equipo 3 - accion armar 
+ 	Equipo 3 -----------ingredientes : ----------
+	Equipo 3 ingrediente  0 : pan horneado 
+	Equipo 3 ingrediente  1 : milanesa cocida 
+	Equipo 3 ingrediente  2 : verdudas extras 
+
+Equipo 3 llega en posicion : 4
