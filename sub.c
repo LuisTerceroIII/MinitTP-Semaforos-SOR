@@ -17,11 +17,6 @@ pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 sem_t sem_horno;
 pthread_mutex_t mutexPosicion = PTHREAD_MUTEX_INITIALIZER;
 
-pthread_mutex_t mutexImpresion = PTHREAD_MUTEX_INITIALIZER;
-
-FILE *salida = NULL;
-
-
 //creo estructura de semaforos 
 struct semaforos {
     sem_t sem_mezclar;
@@ -51,7 +46,7 @@ struct parametro {
 
 //funcion para imprimir las acciones y los ingredientes de la accion
 void* imprimirAccion(void *data, char *accionIn) {
-	struct parametro *mydata = data;
+/* 	struct parametro *mydata = data;
 	//calculo la longitud del array de pasos 
 	int sizeArray = (int)( sizeof(mydata->pasos_param) / sizeof(mydata->pasos_param[0]));
 	//indice para recorrer array de pasos 
@@ -59,7 +54,7 @@ void* imprimirAccion(void *data, char *accionIn) {
 	for(i = 0; i < sizeArray; i ++){
 		//pregunto si la accion del array es igual a la pasada por parametro (si es igual la funcion strcmp devuelve cero)
 		if(strcmp(mydata->pasos_param[i].accion, accionIn) == 0){
-		printf("\n\tEquipo %d - accion %s \n " , mydata->equipo_param, mydata->pasos_param[i].accion);
+		printf("\tEquipo %d - accion %s \n " , mydata->equipo_param, mydata->pasos_param[i].accion);
 		//calculo la longitud del array de ingredientes
 		int sizeArrayIngredientes = (int)( sizeof(mydata->pasos_param[i].ingredientes) / sizeof(mydata->pasos_param[i].ingredientes[0]) );
 		//indice para recorrer array de ingredientes
@@ -67,46 +62,13 @@ void* imprimirAccion(void *data, char *accionIn) {
 		printf("\tEquipo %d -----------ingredientes : ----------\n",mydata->equipo_param); 
 			for(h = 0; h < sizeArrayIngredientes; h++) {
 				//consulto si la posicion tiene valor porque no se cuantos ingredientes tengo por accion 
-				if(strcmp(mydata->pasos_param[i].ingredientes[h]," ") != 0) {
-					if(strlen(mydata->pasos_param[i].ingredientes[h]) > 2){
-						printf("\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);	
-					}
-							//printf("\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);
+				if(strlen(mydata->pasos_param[i].ingredientes[h]) != 0) {
+							printf("\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);
 				}
 			}
 		}
-	}
+	} */
 }
-void* escribirEnArchivo(void *data, char *accionIn) {
-	struct parametro *mydata = data;
-	
-	//salida = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/salida.txt","a"); 
-	//calculo la longitud del array de pasos 
-	int sizeArray = (int)( sizeof(mydata->pasos_param) / sizeof(mydata->pasos_param[0]));
-	//indice para recorrer array de pasos 
-	int i;
-	for(i = 0; i < sizeArray; i ++){
-		//pregunto si la accion del array es igual a la pasada por parametro (si es igual la funcion strcmp devuelve cero)
-		if(strcmp(mydata->pasos_param[i].accion, accionIn) == 0){
-		fprintf(salida,"\n\tEquipo %d - accion %s \n " , mydata->equipo_param, mydata->pasos_param[i].accion);
-		//calculo la longitud del array de ingredientes
-		int sizeArrayIngredientes = (int)( sizeof(mydata->pasos_param[i].ingredientes) / sizeof(mydata->pasos_param[i].ingredientes[0]) );
-		//indice para recorrer array de ingredientes
-		int h;
-		fprintf(salida,"\tEquipo %d -----------ingredientes : ----------\n",mydata->equipo_param); 
-			for(h = 0; h < sizeArrayIngredientes; h++) {
-				//consulto si la posicion tiene valor porque no se cuantos ingredientes tengo por accion 
-				if(strcmp(mydata->pasos_param[i].ingredientes[h]," ") != 0) {
-					if(strlen(mydata->pasos_param[i].ingredientes[h]) > 2){
-						fprintf(salida,"\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);	
-					}
-				}
-			}
-		}
-	}
-}
-
-
 
 //funcion para tomar de ejemplo
 void* cortar(void *data) {
@@ -115,11 +77,7 @@ void* cortar(void *data) {
 	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
 	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 	//uso sleep para simular que que pasa tiempo
 	sleep(5);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
@@ -135,11 +93,7 @@ void* cortarExtra(void *data) {
 	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
 	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 	//uso sleep para simular que que pasa tiempo
 	sleep(5);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
@@ -156,11 +110,7 @@ void* mezclar(void *data) {
 	struct parametro *mydata = data;
 	sem_wait(&mydata->semaforos_param.sem_mezclar);
 	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 	//uso sleep para simular que que pasa tiempo
 	sleep(5);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
@@ -177,11 +127,7 @@ void* salar(void *data) {
 	sem_wait(&mydata->semaforos_param.sem_mezcla_lista);
 	pthread_mutex_lock(&mutexSalero);
 	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 	//uso sleep para simular que que pasa tiempo
 	sleep(5);
 	pthread_mutex_unlock(&mutexSalero);
@@ -199,11 +145,7 @@ void* embetunar(void *data) {
 
 	sem_wait(&mydata->semaforos_param.sem_embetunar);
 
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 
 	sleep(5);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
@@ -219,13 +161,8 @@ void* apanar(void *data) {
 	struct parametro *mydata = data;
 
 	sem_wait(&mydata->semaforos_param.sem_apanar);
-
-	pthread_mutex_lock(&mutexImpresion);
+	
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
-	
 
 	sleep(5);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
@@ -242,11 +179,8 @@ void* cocinar(void *data) {
 	struct parametro *mydata = data;
 	sem_wait(&mydata->semaforos_param.sem_cocinar);
 	pthread_mutex_lock(&mutexSarten);
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	sleep(10);
+	sleep(5);
 	pthread_mutex_unlock(&mutexSarten);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
     sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
@@ -260,12 +194,8 @@ void* hornear(void *data) {
 	struct parametro *mydata = data;
 	sem_wait(&mydata->semaforos_param.sem_hornear);
 	sem_wait(&sem_horno);
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
-	sleep(20);
+	sleep(5);
 	sem_post(&sem_horno);
 	//doy la señal a la siguiente accion (cortar me habilita mezclar)
     sem_post(&mydata->semaforos_param.sem_pan_horneado);
@@ -280,19 +210,17 @@ void* armar(void *data) {
 
 	sem_wait(&mydata->semaforos_param.sem_milanesa_cocinada);
 	sem_wait(&mydata->semaforos_param.sem_pan_horneado);
-	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
-	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
-	
 	sleep(5);
 
 	pthread_mutex_lock(&mutexPosicion);
-	printf("\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
+	printf("Equipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
 	posicionDeLLegada++;
 	pthread_mutex_unlock(&mutexPosicion);
     pthread_exit(NULL);
 }
+
+
 
  void verficarCreacionThread(int rc) {
 	//valido que el hilo se alla creado bien 
@@ -313,6 +241,8 @@ void* cargarReceta(void *data) {
         printf("No se puedo abrir receta \n");
 		exit(-1);
     } else {
+
+
         while (fgets(buffer,100,receta) != NULL) {
             char *split = strtok(buffer,"|");
             struct paso paso;
@@ -339,6 +269,37 @@ void* cargarReceta(void *data) {
             k++;
         }
         fclose(receta);
+
+
+	printf("---------------------------\n");
+	  int sizePasos = sizeof(mydata->pasos_param) / sizeof(mydata->pasos_param[0]);
+
+    printf("Ingrediente : %s\n",mydata->pasos_param[1].ingredientes[3]);
+
+    printf("---------------------------\n");
+    FILE *salida = NULL;
+    salida = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/salida.txt","w"); 
+    fputs("Pasos: \n",salida);
+    for (int i = 0; i < sizePasos; i++) {
+       if(strcmp(mydata->pasos_param[i].accion," ") != 0) {
+            fputs("Accion : ",salida);
+            fputs(mydata->pasos_param[i].accion,salida);
+            fputs("\n",salida);
+            printf("Accion : %s\n",mydata->pasos_param[i].accion);
+            int sizeArrayIngredientes = sizeof(mydata->pasos_param[i].ingredientes) / sizeof(mydata->pasos_param[i].ingredientes[0]);
+            fputs("Ingredeientes : \n",salida);
+            for (int j = 0; j < sizeArrayIngredientes; j++) {
+                if(strcmp(mydata->pasos_param[i].ingredientes[j]," ") != 0) {
+                    printf("Ingrediente : %s\n",mydata->pasos_param[i].ingredientes[j]);
+                    fputs(mydata->pasos_param[i].ingredientes[j],salida);
+                    fputs("\n",salida);
+                }
+            }
+       }
+    }
+	fclose(salida);
+    
+    
 	}
 }
 
@@ -371,7 +332,6 @@ void* ejecutarReceta(void *i) {
 	int p = *((int *) i);
 	
 	printf("Ejecutando equipo %d \n", p);
-	fprintf(salida,"Ejecutando equipo %d \n", p);
 
 	//reservo memoria para el struct
 	struct parametro *pthread_data = malloc(sizeof(struct parametro));
@@ -472,8 +432,6 @@ void* ejecutarReceta(void *i) {
 int main ()
 {
 
-	salida = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/salida.txt","a"); 
-
 	//Inicializacion de semaforo horno
 	//Se inicia en 2, porque puede hornear hasta dos panes.
     sem_init(&sem_horno,0,2);
@@ -509,7 +467,7 @@ int main ()
                                 ejecutarReceta,          
                                 equipoNombre2);
 
- 	rc = pthread_create(&equipo3,                           //identificador unico
+/* 	rc = pthread_create(&equipo3,                           //identificador unico
                             NULL,                          //atributos del thread
                                 ejecutarReceta,          
                                 equipoNombre3); 
@@ -518,7 +476,7 @@ int main ()
                             NULL,                          //atributos del thread
                                 ejecutarReceta,          
                                 equipoNombre4);
- 
+ */
   //faltn inicializaciones
 
 
@@ -533,7 +491,6 @@ int main ()
 	pthread_join (equipo3,NULL);
 	pthread_join (equipo4,NULL);
 
-	fclose(salida);
     pthread_exit(NULL);
 }
 

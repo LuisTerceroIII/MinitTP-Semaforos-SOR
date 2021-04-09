@@ -1,2 +1,9 @@
-cortar|ajo|perejil|pimiento|sandia
-mezclar|ajo picado|perejil picado|huevo|harina
+cortar|ajo|perejil| | 
+mezclar|ajo picado|perejil picado|huevo| 
+salar|mezcla| | |
+embetunar|carne|mezcla| | 
+apanar|carne embetunada| | | 
+cortar extras|lechuga|tomate|cebolla morada|pepino
+cocinar|milanesa| | | 
+hornear|pan crudo| | | 
+armar|pan horneado|milanesa cocida|verdudas extras| 
