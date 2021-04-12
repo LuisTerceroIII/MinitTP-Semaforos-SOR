@@ -16,9 +16,7 @@ pthread_mutex_t mutexSalero = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexHorno = PTHREAD_MUTEX_INITIALIZER;
 
-sem_t sem_horno;
 pthread_mutex_t mutexPosicion = PTHREAD_MUTEX_INITIALIZER;
-
 pthread_mutex_t mutexImpresion = PTHREAD_MUTEX_INITIALIZER;
 
 FILE *salida = NULL;
@@ -481,11 +479,6 @@ int main ()
 {
 
 	salida = fopen("salida.txt","a"); 
-
-	//Inicializacion de semaforo horno
-	//Se inicia en 1, porque puede hornear solo 1 pan. -> no es un mutex
-    sem_init(&sem_horno,0,1);
-
 
 	//creo los nombres de los equipos 
 	int rc;
