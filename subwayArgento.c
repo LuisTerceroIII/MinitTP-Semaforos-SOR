@@ -80,7 +80,6 @@ void* imprimirAccion(void *data, char *accionIn) {
 void* escribirEnArchivo(void *data, char *accionIn) {
 	struct parametro *mydata = data;
 	
-	//salida = fopen("/home/luisterceroiii/Escritorio/TP-Semaforos/MinitTP-Semaforos-SOR/salida.txt","a"); 
 	//calculo la longitud del array de pasos 
 	int sizeArray = (int)( sizeof(mydata->pasos_param) / sizeof(mydata->pasos_param[0]));
 	//indice para recorrer array de pasos 
