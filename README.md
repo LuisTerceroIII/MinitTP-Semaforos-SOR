@@ -1,17 +1,19 @@
 # SOR-Semáforos-1S-2021
 
+# SOR-Semáforos-1S-2021
+
 # TP - Threads y Semáforos
 
-### Desarrollo
+## Desarrollo
 Comencé con una lectura detenida al enunciado y al código template ofrecido.
 Luego separe al trabajo realizado por los cuatro equipos en 9 pasos.
 7 de estos pasos tienen requisitos para comenzar, es decir, que esperan eventos antes de poder ejecutarse.
 Realice un pseudocódigo y una prueba de escritorio para sincronizar las tareas.
 
-#### Pseudocódigo y prueba de escritorio
+### Pseudocódigo y prueba de escritorio
 ![](https://i.ibb.co/PhvFCxF/pseudocodigo.jpg")
 
-###### Semáforos y Mutex
+
 ![](https://i.ibb.co/HF5b30h/prueba-escritorio.png")
 
 #### Código, implementación y problemas encontrados.
@@ -30,7 +32,7 @@ pthread_mutex_t mutexImpresion = PTHREAD_MUTEX_INITIALIZER;
 //Sirve para incrementar el contador de llegada sin errores.
 pthread_mutex_t mutexPosicion = PTHREAD_MUTEX_INITIALIZER;
 ```
-##### Semáforos de acción
+#####  Semáforos de acción
 Estos semáforos sincronizan las tareas dentro de cada thread-equipo.
 ```c
     sem_t sem_mezclar;
@@ -43,7 +45,7 @@ Estos semáforos sincronizan las tareas dentro de cada thread-equipo.
     sem_t sem_milanesa_cocinada;
     sem_t sem_pan_horneado;
 ```
-##### Metodos de accion
+#####  Metodos de accion
 ###### cortar
 ```c
 void* cortar(void *data) {
@@ -193,7 +195,7 @@ void* armar(void *data) {
 }
 ```
 Respecto a esta parte el único problema que encontré fue que el método usleep que se usaba en el template no funcionaba, no había espera, sino que ejecutaba todo en 1 segundo, probe cambiando a sleep() y funciono correctamente.
-##### Manejo de archivos
+#####  Manejo de archivos
 ###### Cargar receta de archivo
 ```c
 void* cargarReceta(void *data) {
