@@ -11,7 +11,6 @@
 static int posicionDeLLegada = 1;
 
 //RECURSOS COMPARTIDOS : 
-pthread_mutex_t mutexFile = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSalero = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexHorno = PTHREAD_MUTEX_INITIALIZER;
@@ -70,8 +69,7 @@ void* imprimirAccion(void *data, char *accionIn) {
 				if(strcmp(mydata->pasos_param[i].ingredientes[h]," ") != 0) {
 					if(strlen(mydata->pasos_param[i].ingredientes[h]) > 2){
 						printf("\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);	
-					}
-							//printf("\tEquipo %d ingrediente  %d : %s \n",mydata->equipo_param,h,mydata->pasos_param[i].ingredientes[h]);
+					}							
 				}
 			}
 		}
@@ -79,7 +77,6 @@ void* imprimirAccion(void *data, char *accionIn) {
 }
 void* escribirEnArchivo(void *data, char *accionIn) {
 	struct parametro *mydata = data;
-	
 	//calculo la longitud del array de pasos 
 	int sizeArray = (int)( sizeof(mydata->pasos_param) / sizeof(mydata->pasos_param[0]));
 	//indice para recorrer array de pasos 
@@ -105,95 +102,78 @@ void* escribirEnArchivo(void *data, char *accionIn) {
 	}
 }
 
-
-
-//funcion para tomar de ejemplo
 void* cortar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "cortar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
-	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
+	
 	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
 	pthread_mutex_unlock(&mutexImpresion);
-	
-	//uso sleep para simular que que pasa tiempo
 	sleep(5);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_mezclar);
 	
-    pthread_exit(NULL);
+	//doy la señal a la siguiente accion (cortar me habilita mezclar)
+    	sem_post(&mydata->semaforos_param.sem_mezclar);
+	
+    	pthread_exit(NULL);
 }
 
-//funcion para tomar de ejemplo
 void* cortarExtra(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "cortar extras";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
-	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
+	
 	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
 	pthread_mutex_unlock(&mutexImpresion);
-	
-	//uso sleep para simular que que pasa tiempo
 	sleep(5);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_verduras_extras);
+
+    	sem_post(&mydata->semaforos_param.sem_verduras_extras);
 	
-    pthread_exit(NULL);
+    	pthread_exit(NULL);
 }
 
 
 void* mezclar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "mezclar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
+	
 	sem_wait(&mydata->semaforos_param.sem_mezclar);
-	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
+
 	pthread_mutex_lock(&mutexImpresion);
+	
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
+	
 	pthread_mutex_unlock(&mutexImpresion);
-	
-	//uso sleep para simular que que pasa tiempo
 	sleep(5);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_mezcla_lista);
+    	sem_post(&mydata->semaforos_param.sem_mezcla_lista);
 	
-    pthread_exit(NULL);
+    	pthread_exit(NULL);
 }
 
 void* salar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "salar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
+	
 	sem_wait(&mydata->semaforos_param.sem_mezcla_lista);
+	
 	pthread_mutex_lock(&mutexSalero);
-	//llamo a la funcion imprimir le paso el struct y la accion de la funcion
 	pthread_mutex_lock(&mutexImpresion);
+	
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
-	pthread_mutex_unlock(&mutexImpresion);
 	
-	//uso sleep para simular que que pasa tiempo
+	pthread_mutex_unlock(&mutexImpresion);
 	sleep(5);
 	pthread_mutex_unlock(&mutexSalero);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_embetunar);
+   	sem_post(&mydata->semaforos_param.sem_embetunar);
 	
-    pthread_exit(NULL);
+    	pthread_exit(NULL);
 }
 
 void* embetunar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "embetunar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
 
 	sem_wait(&mydata->semaforos_param.sem_embetunar);
@@ -202,19 +182,14 @@ void* embetunar(void *data) {
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
 	pthread_mutex_unlock(&mutexImpresion);
-	
-
 	sleep(5);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_apanar);
+    	sem_post(&mydata->semaforos_param.sem_apanar);
 	
-    pthread_exit(NULL);
+    	pthread_exit(NULL);
 }
 
 void* apanar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "apanar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
 
 	sem_wait(&mydata->semaforos_param.sem_apanar);
@@ -223,23 +198,19 @@ void* apanar(void *data) {
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
 	pthread_mutex_unlock(&mutexImpresion);
-	
-	
-
 	sleep(5);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_cocinar);
+    	sem_post(&mydata->semaforos_param.sem_cocinar);
 	sem_post(&mydata->semaforos_param.sem_hornear);
 	
-    pthread_exit(NULL);
+    	pthread_exit(NULL);
 }
 
 void* cocinar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "cocinar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
+	
 	sem_wait(&mydata->semaforos_param.sem_cocinar);
+	
 	pthread_mutex_lock(&mutexSarten);
 	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
@@ -247,43 +218,36 @@ void* cocinar(void *data) {
 	pthread_mutex_unlock(&mutexImpresion);
 	sleep(10);
 	pthread_mutex_unlock(&mutexSarten);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
-    pthread_exit(NULL);
+	
+   	sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
+	
+    	pthread_exit(NULL);
 }
 
 void* hornear(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "hornear";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
-
-
-
+	
 	pthread_mutex_lock(&mutexHorno);
-
 	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
-
 	pthread_mutex_unlock(&mutexImpresion);
-	
 	sleep(20);
-
 	pthread_mutex_unlock(&mutexHorno);
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-    sem_post(&mydata->semaforos_param.sem_pan_horneado);
-    pthread_exit(NULL);
+    	sem_post(&mydata->semaforos_param.sem_pan_horneado);
+	
+    	pthread_exit(NULL);
 }
 
 void* armar(void *data) {
-	//creo el nombre de la accion de la funcion 
 	char *accion = "armar";
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
 	struct parametro *mydata = data;
 
 	sem_wait(&mydata->semaforos_param.sem_milanesa_cocinada);
 	sem_wait(&mydata->semaforos_param.sem_pan_horneado);
+	sem_wait(&mydata->semaforos_param.sem_verduras_extras);
+	
 	pthread_mutex_lock(&mutexImpresion);
 	imprimirAccion(mydata,accion);
 	escribirEnArchivo(mydata,accion);
@@ -296,7 +260,8 @@ void* armar(void *data) {
 	fprintf(salida,"\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
 	posicionDeLLegada++;
 	pthread_mutex_unlock(&mutexPosicion);
-    pthread_exit(NULL);
+	
+    	pthread_exit(NULL);
 }
 
  void verficarCreacionThread(int rc) {
@@ -308,7 +273,7 @@ void* armar(void *data) {
 }
 
 void* cargarReceta(void *data) {
-	//creo el puntero para pasarle la referencia de memoria (data) del struct pasado por parametro (la cual es un puntero). 
+
 	struct parametro *mydata = data;
 	FILE *receta = NULL;
     char buffer [100];
@@ -485,7 +450,6 @@ int main ()
 	int *equipoNombre2 =malloc(sizeof(*equipoNombre2));
 	int *equipoNombre3 =malloc(sizeof(*equipoNombre3));
 	int *equipoNombre4 =malloc(sizeof(*equipoNombre4));
-//faltan equipos
   
 	*equipoNombre1 = 1;
 	*equipoNombre2 = 2;
@@ -518,8 +482,7 @@ int main ()
                             NULL,                          //atributos del thread
                                 ejecutarReceta,          
                                 equipoNombre4);
- 
-  //faltn inicializaciones
+
 
 
    if (rc){
@@ -534,6 +497,7 @@ int main ()
 	pthread_join (equipo4,NULL);
 
 	fclose(salida);
+	
     pthread_exit(NULL);
 }
 
