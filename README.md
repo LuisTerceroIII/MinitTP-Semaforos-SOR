@@ -10,6 +10,7 @@ Realice un pseudocódigo y una prueba de escritorio para sincronizar las tareas.
 
 #### Pseudocódigo y prueba de escritorio
 ![](https://i.ibb.co/PhvFCxF/pseudocodigo.jpg")
+
 ###### Semáforos y Mutex
 ![](https://i.ibb.co/HF5b30h/prueba-escritorio.png")
 
