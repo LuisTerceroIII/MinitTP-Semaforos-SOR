@@ -1,7 +1,5 @@
 # SOR-Semáforos-1S-2021
 
-# SOR-Semáforos-1S-2021
-
 # TP - Threads y Semáforos
 
 ## Desarrollo
