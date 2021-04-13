@@ -227,6 +227,8 @@ void* cocinar(void *data) {
 void* hornear(void *data) {
 	char *accion = "hornear";
 	struct parametro *mydata = data;
+
+	sem_wait(&mydata->semaforos_param.sem_hornear);
 	
 	pthread_mutex_lock(&mutexHorno);
 	pthread_mutex_lock(&mutexImpresion);
@@ -235,9 +237,9 @@ void* hornear(void *data) {
 	pthread_mutex_unlock(&mutexImpresion);
 	sleep(20);
 	pthread_mutex_unlock(&mutexHorno);
-    	sem_post(&mydata->semaforos_param.sem_pan_horneado);
+	sem_post(&mydata->semaforos_param.sem_pan_horneado);
 	
-    	pthread_exit(NULL);
+	pthread_exit(NULL);
 }
 
 void* armar(void *data) {
