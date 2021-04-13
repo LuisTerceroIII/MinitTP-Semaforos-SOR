@@ -11,7 +11,7 @@ Realice un pseudocódigo y una prueba de escritorio para sincronizar las tareas.
 #### Pseudocódigo y prueba de escritorio
 ![](https://i.ibb.co/PhvFCxF/pseudocodigo.jpg")
 ###### Semáforos y Mutex
-![](https://i.ibb.co/h8qydgs/prueba-escritorio.png")
+![](https://i.ibb.co/HF5b30h/prueba-escritorio.png")
 
 #### Código, implementación y problemas encontrados.
 Lo que hice fue agregar los demás equipos (threads) al método main, preparar los semáforos y mutex planteados arriba, más el necesario para imprimir en terminal y escribir en el archivo de salida de manera secuencial, crear un método "acción" para cada parte de la receta (cortar,mezclar,salar,etc...) y hacer las operaciones de manejo de archivo.
