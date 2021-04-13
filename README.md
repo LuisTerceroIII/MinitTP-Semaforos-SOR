@@ -160,7 +160,6 @@ void* cocinar(void *data) {
 void* hornear(void *data) {
     char *accion = "hornear";
     struct parametro *mydata = data;
-    
     sem_wait(&mydata->semaforos_param.sem_hornear);
     pthread_mutex_lock(&mutexHorno);
     pthread_mutex_lock(&mutexImpresion);
