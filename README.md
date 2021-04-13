@@ -11,20 +11,7 @@ Realice un pseudocódigo y una prueba de escritorio para sincronizar las tareas.
 #### Pseudocódigo y prueba de escritorio
 ![](https://i.ibb.co/PhvFCxF/pseudocodigo.jpg")
 ###### Semáforos y Mutex
-|  Semáforos y mutexs | tiempo 0  | tiempo 1  | tiempo 2  | tiempo 3  | tiempo 4  |  tiempo 5 | tiempo 6  | tiempo 7  | tiempo 8  | tiempo 9  |
-| :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: | :------------: |
-|sem_mezclar   |  0 | 1  | 0  | 0  | 0  |  0 | 0  |0   |0   | 0  |
-| sem_mezcla_lista  | 0  | 0| 1  | 0  | 0  | 0  |  0 | 0  |0   |0   |
-| sem_embetunar_carne  |0   | 0  | 0  |  0 | 1  | 0  | 0  | 0  | 0  | 0  |
-| sem_apanar  |  0 | 0  | 0  | 0  |  0  |  1 | 0  | 0  |  0 | 0  |
-| sem_cocinar  | 0  | 0  | 0  | 0  |  0  | 0  | 1  | 0  |  0 | 0  |
-| sem_hornearPan   | 0  | 0  | 0  | 0  |  0  | 0  |  1 |  0 | 0  |  0 |
-| sem_milanesa_cocinada  | 0  |  0 | 0  |  0 |  0  | 0  | 0  | 0  | 1  | 0  |
-|  sem_pan_horneado| 0  |  0 | 0  |  0 |  0  | 0  | 0  | 0  | 1  | 0  |
-|  sem_verduras_extras |  0 | 1   | 1  |1  |  1  | 1  | 1  | 1  | 1  | 0  |
-| mutex_salero |  unlock |unlock   | unlock  | lock  | unlock   | unlock  |unlock   | unlock  |unlock   | unlock |
-| mutex_sarten |  unlock |unlock   | unlock  |  unlock | unlock   | unlock  |  unlock |  lock |  unlock |  unlock |
-|  mutex_horno |  unlock|unlock   | unlock  |  unlock |  unlock  | unlock  |   | lock  |  unlock | unlock  |
+![](https://i.ibb.co/h8qydgs/prueba-escritorio.png")
 
 #### Código, implementación y problemas encontrados.
 Lo que hice fue agregar los demás equipos (threads) al método main, preparar los semáforos y mutex planteados arriba, más el necesario para imprimir en terminal y escribir en el archivo de salida de manera secuencial, crear un método "acción" para cada parte de la receta (cortar,mezclar,salar,etc...) y hacer las operaciones de manejo de archivo.
