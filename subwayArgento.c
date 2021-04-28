@@ -15,8 +15,6 @@ pthread_mutex_t mutexSalero = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexHorno = PTHREAD_MUTEX_INITIALIZER;
 
-pthread_mutex_t mutexPosicion = PTHREAD_MUTEX_INITIALIZER;
-
 sem_t sem_impresion;
 sem_t sem_posicion;
 
