@@ -127,9 +127,6 @@ void* cortar(void *data) {
 	struct parametro *mydata = data;
 	sleep(5);
 
-	/* sem_post(&mydata->semaforos_param.sem_cortar_imprimir); */
-	//doy la señal a la siguiente accion (cortar me habilita mezclar)
-	/* sem_wait(&mydata->semaforos_param.sem_cortar_imprimir); */
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
@@ -143,9 +140,11 @@ void* cortarExtra(void *data) {
 	char *accion = "cortar extras";
 	struct parametro *mydata = data;
 	sleep(5);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
+
 	sem_post(&mydata->semaforos_param.sem_verduras_extras);
 	pthread_exit(NULL);
 }
@@ -157,6 +156,7 @@ void* mezclar(void *data) {
 	
 	sem_wait(&mydata->semaforos_param.sem_mezclar);
 	sleep(5);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
@@ -172,6 +172,7 @@ void* salar(void *data) {
 	pthread_mutex_lock(&mutexSalero);
 	sleep(5);
 	pthread_mutex_unlock(&mutexSalero);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
@@ -187,9 +188,11 @@ void* embetunar(void *data) {
 
 	sem_wait(&mydata->semaforos_param.sem_embetunar);
 	sleep(5);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
+
 	sem_post(&mydata->semaforos_param.sem_apanar);
 	pthread_exit(NULL);
 }
@@ -199,9 +202,11 @@ void* apanar(void *data) {
 	struct parametro *mydata = data;
 	sem_wait(&mydata->semaforos_param.sem_apanar);
 	sleep(5);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
+
 	sem_post(&mydata->semaforos_param.sem_cocinar);
 	sem_post(&mydata->semaforos_param.sem_hornear);
 
@@ -217,10 +222,10 @@ void* cocinar(void *data) {
 	pthread_mutex_lock(&mutexSarten);
 	sleep(10);
 	pthread_mutex_unlock(&mutexSarten);
+
 	sem_wait(&sem_impresion);
 	escribir(data,accion);
 	sem_post(&sem_impresion);
-
 
    	sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
     pthread_exit(NULL);
@@ -242,7 +247,6 @@ void* hornear(void *data) {
 
 	sem_post(&mydata->semaforos_param.sem_pan_horneado);
 
-	
 	pthread_exit(NULL);
 }
 
