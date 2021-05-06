@@ -15,10 +15,6 @@ pthread_mutex_t mutexSalero = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexHorno = PTHREAD_MUTEX_INITIALIZER;
 
-sem_t sem_impresion;
-sem_t sem_posicion;
-
-
 FILE *salida = NULL;
 
 
@@ -114,11 +110,9 @@ void* escribir(void *data, char *accionIn) {
 
 void anunciarLlegada(void *data) {
 	struct parametro *mydata = data;
-	sem_wait(&sem_posicion);
 	printf("\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
 	fprintf(salida,"\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
 	posicionDeLLegada++;
-	sem_post(&sem_posicion);
 }
 
 
@@ -126,13 +120,8 @@ void* cortar(void *data) {
 	char *accion = "cortar";
 	struct parametro *mydata = data;
 	sleep(5);
-
-	sem_wait(&sem_impresion);
-	escribir(data,accion);
-	sem_post(&sem_impresion);
-
-	sem_post(&mydata->semaforos_param.sem_mezclar);
-
+	escribir(data,accion);    
+	sem_post(&mydata->semaforos_param.sem_mezclar);       
 	pthread_exit(NULL);
 }
 
@@ -140,11 +129,7 @@ void* cortarExtra(void *data) {
 	char *accion = "cortar extras";
 	struct parametro *mydata = data;
 	sleep(5);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_verduras_extras);
 	pthread_exit(NULL);
 }
@@ -153,14 +138,9 @@ void* cortarExtra(void *data) {
 void* mezclar(void *data) {
 	char *accion = "mezclar";
 	struct parametro *mydata = data;
-	
 	sem_wait(&mydata->semaforos_param.sem_mezclar);
 	sleep(5);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_mezcla_lista);
 	pthread_exit(NULL);
 }
@@ -172,27 +152,17 @@ void* salar(void *data) {
 	pthread_mutex_lock(&mutexSalero);
 	sleep(5);
 	pthread_mutex_unlock(&mutexSalero);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_embetunar);
-	
     pthread_exit(NULL);
 }
 
 void* embetunar(void *data) {
 	char *accion = "embetunar";
 	struct parametro *mydata = data;
-
 	sem_wait(&mydata->semaforos_param.sem_embetunar);
 	sleep(5);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_apanar);
 	pthread_exit(NULL);
 }
@@ -202,31 +172,20 @@ void* apanar(void *data) {
 	struct parametro *mydata = data;
 	sem_wait(&mydata->semaforos_param.sem_apanar);
 	sleep(5);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_cocinar);
 	sem_post(&mydata->semaforos_param.sem_hornear);
-
 	pthread_exit(NULL);
 }
 
 void* cocinar(void *data) {
 	char *accion = "cocinar";
 	struct parametro *mydata = data;
-	
-	sem_wait(&mydata->semaforos_param.sem_cocinar);
-	
+	sem_wait(&mydata->semaforos_param.sem_cocinar);	
 	pthread_mutex_lock(&mutexSarten);
 	sleep(10);
 	pthread_mutex_unlock(&mutexSarten);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
    	sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
     pthread_exit(NULL);
 }
@@ -234,38 +193,24 @@ void* cocinar(void *data) {
 void* hornear(void *data) {
 	char *accion = "hornear";
 	struct parametro *mydata = data;
-
 	sem_wait(&mydata->semaforos_param.sem_hornear);
-	
 	pthread_mutex_lock(&mutexHorno);
 	sleep(20);
 	pthread_mutex_unlock(&mutexHorno);
-
-	sem_wait(&sem_impresion);
 	escribir(data,accion);
-	sem_post(&sem_impresion);
-
 	sem_post(&mydata->semaforos_param.sem_pan_horneado);
-
 	pthread_exit(NULL);
 }
 
 void* armar(void *data) {
 	char *accion = "armar";
 	struct parametro *mydata = data;
-
 	sem_wait(&mydata->semaforos_param.sem_milanesa_cocinada);
 	sem_wait(&mydata->semaforos_param.sem_pan_horneado);
 	sem_wait(&mydata->semaforos_param.sem_verduras_extras);
-	
 	sleep(5);
-
-	sem_wait(&sem_impresion);
-	escribir(data,accion);
-	sem_post(&sem_impresion);
-
+	escribir(data,accion);	
 	anunciarLlegada(data);
-
 	pthread_exit(NULL);
 }
 
@@ -456,9 +401,6 @@ void* ejecutarReceta(void *i) {
 
 int main ()
 {	
-	//Semaforos para impresion
-	sem_init(&sem_impresion,0,1);
-	sem_init(&sem_posicion,0,1);
 
 	salida = fopen("salida.txt","a"); 
 
@@ -515,13 +457,11 @@ int main ()
 	pthread_join (equipo4,NULL);
 
 	fclose(salida);
-	sem_destroy(&sem_impresion);
-	sem_destroy(&sem_posicion);
 	
     pthread_exit(NULL);
 }
 
 
-//Para compilar:   gcc subwayArgentoCopy.c -o subway -lpthread
+//Para compilar:   gcc subwayArgento.c -o subway -lpthread
 //Para ejecutar:   ./subway
 

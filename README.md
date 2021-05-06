@@ -15,7 +15,7 @@ Realice un pseudocódigo y una prueba de escritorio para sincronizar las tareas.
 ![](https://i.ibb.co/HF5b30h/prueba-escritorio.png")
 
 #### Código, implementación y problemas encontrados.
-Lo que hice fue agregar los demás equipos (threads) al método main, preparar los semáforos y mutex planteados arriba, más el necesario para imprimir en terminal y escribir en el archivo de salida de manera secuencial, crear un método "acción" para cada parte de la receta (cortar,mezclar,salar,etc...) y hacer las operaciones de manejo de archivo.
+Lo que hice fue agregar los demás equipos (threads) al método main, preparar los semáforos y mutex planteados arriba, cree un método "acción" para cada parte de la receta (cortar,mezclar,salar,etc...) y hice las operaciones de manejo de archivo.
 ##### Mutex de recursos compartidos
 Estos mutex se comparten por todos los equipos.
 ```c
@@ -24,11 +24,6 @@ pthread_mutex_t mutexSalero = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexSarten = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t mutexHorno = PTHREAD_MUTEX_INITIALIZER;
 
-//Sincroniza salidas
-pthread_mutex_t mutexImpresion = PTHREAD_MUTEX_INITIALIZER;
-
-//Sirve para incrementar el contador de llegada sin errores.
-pthread_mutex_t mutexPosicion = PTHREAD_MUTEX_INITIALIZER;
 ```
 #####  Semáforos de acción
 Estos semáforos sincronizan las tareas dentro de cada thread-equipo.
@@ -47,78 +42,63 @@ Estos semáforos sincronizan las tareas dentro de cada thread-equipo.
 ###### cortar
 ```c
 void* cortar(void *data) {
-    char *accion = "cortar";
-    struct parametro *mydata = data;
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    sem_post(&mydata->semaforos_param.sem_mezclar);
-    pthread_exit(NULL);
+	char *accion = "cortar";
+	struct parametro *mydata = data;
+	sleep(5);
+	escribir(data,accion);    
+	sem_post(&mydata->semaforos_param.sem_mezclar);       
+	pthread_exit(NULL);
 }
 ```
 ###### cortarExtra
 Esta funcion al igual que cortar, no tiene requisitos para ejecutarse.
 ```c
 void* cortarExtra(void *data) {
-    char *accion = "cortar extras";
-    struct parametro *mydata = data;
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    sem_post(&mydata->semaforos_param.sem_verduras_extras);
-    pthread_exit(NULL);
+  	char *accion = "cortar extras";
+	struct parametro *mydata = data;
+	sleep(5);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_verduras_extras);
+	pthread_exit(NULL);
 }
 ```
 ###### mezclar
 ```c
 void* mezclar(void *data) {
-    char *accion = "mezclar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_mezclar);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    sem_post(&mydata->semaforos_param.sem_mezcla_lista);
-    pthread_exit(NULL);
+	char *accion = "mezclar";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_mezclar);
+	sleep(5);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_mezcla_lista);
+	pthread_exit(NULL);
 }
 
 ```
 ###### salar
 ```c
 void* salar(void *data) {
-    char *accion = "salar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_mezcla_lista);
-    pthread_mutex_lock(&mutexSalero);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    pthread_mutex_unlock(&mutexSalero);
-    sem_post(&mydata->semaforos_param.sem_embetunar);
+	char *accion = "salar";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_mezcla_lista);
+	pthread_mutex_lock(&mutexSalero);
+	sleep(5);
+	pthread_mutex_unlock(&mutexSalero);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_embetunar);
     pthread_exit(NULL);
 }
 ```
 ###### embetunar
 ```c
 void* embetunar(void *data) {
-    char *accion = "embetunar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_embetunar);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    sem_post(&mydata->semaforos_param.sem_apanar);
-    pthread_exit(NULL);
+	char *accion = "embetunar";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_embetunar);
+	sleep(5);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_apanar);
+	pthread_exit(NULL);
 }
 
 ```
@@ -126,72 +106,79 @@ void* embetunar(void *data) {
 ```c
 void* apanar(void *data) {
     char *accion = "apanar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_apanar);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    sem_post(&mydata->semaforos_param.sem_cocinar);
-    sem_post(&mydata->semaforos_param.sem_hornear);
-    pthread_exit(NULL);
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_apanar);
+	sleep(5);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_cocinar);
+	sem_post(&mydata->semaforos_param.sem_hornear);
+	pthread_exit(NULL);
 }
 ```
 ###### cocinar
 ```c
 void* cocinar(void *data) {
-    char *accion = "cocinar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_cocinar);
-    pthread_mutex_lock(&mutexSarten);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(10);
-    pthread_mutex_unlock(&mutexSarten);
-    sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
+	char *accion = "cocinar";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_cocinar);	
+	pthread_mutex_lock(&mutexSarten);
+	sleep(10);
+	pthread_mutex_unlock(&mutexSarten);
+	escribir(data,accion);
+   	sem_post(&mydata->semaforos_param.sem_milanesa_cocinada);
     pthread_exit(NULL);
 }
 ```
 ###### hornear
 ```c
 void* hornear(void *data) {
-    char *accion = "hornear";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_hornear);
-    pthread_mutex_lock(&mutexHorno);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(20);
-    pthread_mutex_unlock(&mutexHorno);
-    sem_post(&mydata->semaforos_param.sem_pan_horneado);
-    pthread_exit(NULL);
+	char *accion = "hornear";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_hornear);
+	pthread_mutex_lock(&mutexHorno);
+	sleep(20);
+	pthread_mutex_unlock(&mutexHorno);
+	escribir(data,accion);
+	sem_post(&mydata->semaforos_param.sem_pan_horneado);
+	pthread_exit(NULL);
 }
 ```
 ###### armar
 ```c
 void* armar(void *data) {
-    char *accion = "armar";
-    struct parametro *mydata = data;
-    sem_wait(&mydata->semaforos_param.sem_milanesa_cocinada);
-    sem_wait(&mydata->semaforos_param.sem_pan_horneado);
-    pthread_mutex_lock(&mutexImpresion);
-    imprimirAccion(mydata,accion);
-    escribirEnArchivo(mydata,accion);
-    pthread_mutex_unlock(&mutexImpresion);
-    sleep(5);
-    pthread_mutex_lock(&mutexPosicion);
-    printf("\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
-    fprintf(salida,"\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
-    posicionDeLLegada++;
-    pthread_mutex_unlock(&mutexPosicion);
-    pthread_exit(NULL);
+	char *accion = "armar";
+	struct parametro *mydata = data;
+	sem_wait(&mydata->semaforos_param.sem_milanesa_cocinada);
+	sem_wait(&mydata->semaforos_param.sem_pan_horneado);
+	sem_wait(&mydata->semaforos_param.sem_verduras_extras);
+	sleep(5);
+	escribir(data,accion);	
+	anunciarLlegada(data);
+	pthread_exit(NULL);
 }
 ```
+
+Luego agregué dos métodos mas, uno para llamar a las funciones de escribir y otro para anunciar la llegada a la meta de un equipo.
+
+###### escribir
+```c
+void* escribir(void *data, char *accionIn) { 
+		imprimirAccion(data,accionIn);
+		escribirEnArchivo(data,accionIn);
+}
+```
+###### anunciarLlegada
+```c
+//Fuera del main declaro la variable de posiciones.
+static int posicionDeLLegada = 1;
+void anunciarLlegada(void *data) {
+	struct parametro *mydata = data;
+	printf("\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
+	fprintf(salida,"\nEquipo %d llega en posicion : %d\n",mydata->equipo_param,posicionDeLLegada);
+	posicionDeLLegada++;
+}
+```
+
 Respecto a esta parte el único problema que encontré fue que el método usleep que se usaba en el template no funcionaba, no había espera, sino que ejecutaba todo en 1 segundo, probe cambiando a sleep() y funciono correctamente.
 #####  Manejo de archivos
 ###### Cargar receta de archivo
